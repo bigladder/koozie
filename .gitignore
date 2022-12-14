@@ -1,0 +1,6 @@
+*.egg*/
+.doit.*
+.pytest_cache/
+.vscode/
+__pycache__/
+dist/
