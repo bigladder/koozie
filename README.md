@@ -1,3 +1,5 @@
+[![Release](https://img.shields.io/pypi/v/koozie.svg)](https://pypi.python.org/pypi/koozie)
+
 [![Test](https://github.com/bigladder/koozie/actions/workflows/test.yaml/badge.svg)](https://github.com/bigladder/koozie/actions/workflows/test.yaml)
 
 koozie
