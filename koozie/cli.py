@@ -20,7 +20,10 @@ def list_callback(ctx: click.Context, param: click.Parameter, value):
         aliases = ""
         if len(unit_list[dim]["units"][unit]) > 0:
           aliases = f" ({', '.join(unit_list[dim]['units'][unit])})"
-        click.echo(f"  - {unit}{aliases}")
+        try:
+          click.echo(f"  - {unit}{aliases}")
+        except UnicodeEncodeError as e:
+          click.echo(f"  - {unit}")
       click.echo(f"\n")
 
   ctx.exit()
