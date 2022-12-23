@@ -33,3 +33,7 @@ jobs:
         run: |
           source $VENV
           poetry run pytest
+      - name: List units
+        run: |
+          source $VENV
+          poetry run koozie -l
