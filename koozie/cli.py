@@ -5,7 +5,7 @@ import click
 import koozie
 
 
-def list_callback(ctx: click.Context, param: click.Parameter, value):
+def list_callback(ctx: click.Context, param: click.Parameter, value): #pylint: disable=W0613
     """"""
     if not value or ctx.resilient_parsing:
         return
@@ -51,7 +51,7 @@ def list_callback(ctx: click.Context, param: click.Parameter, value):
 @click.argument("value", type=click.FLOAT)
 @click.argument("from_units", type=click.STRING)
 @click.argument("to_units", type=click.STRING, required=False)
-def koozie_cli(value, from_units, to_units):
+def koozie_cli(value, from_units, to_units, list): # pylint: disable=W0613,W0622 
     """koozie: Convert VALUE from FROM_UNITS to TO_UNITS.
 
     If TO_UNITS is not specified, VALUE will be converted from FROM_UNITS into base SI units.
