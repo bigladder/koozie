@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     defaults:
       run:
         shell: bash
@@ -21,6 +21,15 @@ jobs:
         uses: bigladder/github-actions/setup-python-poetry@main
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Lint with Pylint
+        run: |
+          poetry run pylint ${{github.workspace}}
+          poetry run pylint test/*.py
+        continue-on-error: true
+      - name: Static type checking
+        run: |
+          poetry run mypy ${{github.workspace}}
+        continue-on-error: true
       - name: Test
         run: |
           source $VENV
