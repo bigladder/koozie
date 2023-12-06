@@ -1,10 +1,12 @@
+"""koozie unit tests"""
 from pytest import approx
+from click.testing import CliRunner
 from koozie import fr_u, to_u, convert
 from koozie.cli import koozie_cli
-from click.testing import CliRunner
 
 
 def test_units():
+    """Test various unit conversions"""
     assert fr_u(-40.0, "°F") == approx(fr_u(-40.0, "°C"))
     assert convert(-40.0, "°F", "°C") == approx(convert(-40.0, "°C", "°F"))
     assert fr_u(32.0, "°F") == approx(fr_u(0.0, "°C"))
@@ -17,13 +19,17 @@ def test_units():
 runner = CliRunner()
 
 
-def cli_wrapper(args=[], expect_failure=False):
+def cli_wrapper(args=None, expect_failure=False):
+    """Wrapper function for testing the CLI programmatically"""
+    if args is None:
+        args = []
     result = runner.invoke(koozie_cli, args)
     assert (result.exit_code != 0) == expect_failure
     return result.output
 
 
 def test_cli():
+    """Test command line interface functionality"""
     cli_wrapper(["--help"])
     cli_wrapper(["-l"])
 

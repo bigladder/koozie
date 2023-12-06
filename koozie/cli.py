@@ -1,9 +1,11 @@
-import koozie
-import click
+"""koozie command line interface"""
 import sys
+import click
+import koozie
 
 
-def list_callback(ctx: click.Context, param: click.Parameter, value):  # [unused-argument]
+def list_callback(ctx: click.Context, _: click.Parameter, value):
+    """Callback function for the list command."""
     if not value or ctx.resilient_parsing:
         return
 
@@ -23,9 +25,9 @@ def list_callback(ctx: click.Context, param: click.Parameter, value):  # [unused
                     aliases = f" ({', '.join(unit_list[dim]['units'][unit])})"
                 try:
                     click.echo(f"  - {unit}{aliases}")
-                except UnicodeEncodeError as e:
+                except UnicodeEncodeError:
                     click.echo(f"  - {unit}")
-            click.echo(f"\n")
+            click.echo("\n")
 
     ctx.exit()
 
@@ -46,7 +48,7 @@ def list_callback(ctx: click.Context, param: click.Parameter, value):  # [unused
 @click.argument("value", type=click.FLOAT)
 @click.argument("from_units", type=click.STRING)
 @click.argument("to_units", type=click.STRING, required=False)
-def koozie_cli(value, from_units, to_units, list):
+def koozie_cli(value, from_units, to_units, list): # pylint: disable=unused-argument,redefined-builtin
     """koozie: Convert VALUE from FROM_UNITS to TO_UNITS.
 
     If TO_UNITS is not specified, VALUE will be converted from FROM_UNITS into base SI units.
