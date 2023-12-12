@@ -1,6 +1,8 @@
 """koozie functions"""
 import importlib.resources as pkg_resources
 from collections import OrderedDict
+from collections.abc import Iterable
+from typing import List
 
 import pint
 
@@ -90,7 +92,7 @@ def get_unit_list():
                 dimensionality = f"{unit_registry[u].dimensionality}"
             if dimensionality not in unit_list:
                 unit_list[dimensionality] = {"aliases": [], "units": {}}
-            unit = list(unit_registry[u]._units._d.keys())[0] # pylint: disable=protected-access
+            unit = list(unit_registry[u]._units._d.keys())[0]  # pylint: disable=protected-access
             if unit not in unit_list[dimensionality]["units"]:
                 unit_list[dimensionality]["units"][unit] = []
             if u != unit:
@@ -106,4 +108,4 @@ def get_unit_list():
         if dimensionality not in unit_list:
             unit_list[dimensionality] = {"aliases": [], "units": {}}
         unit_list[dimensionality]["aliases"].append(dim)
-    return OrderedDict(sorted(unit_list.items(), key=lambda x : len(x[0])))
+    return OrderedDict(sorted(unit_list.items(), key=lambda x: len(x[0])))

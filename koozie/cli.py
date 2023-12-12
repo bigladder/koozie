@@ -4,9 +4,9 @@ import click
 import koozie
 
 
-def list_callback(ctx: click.Context, _: click.Parameter, value):
+def list_callback(context: click.Context, _: click.Parameter, value: str) -> None:
     """Callback function for the list command."""
-    if not value or ctx.resilient_parsing:
+    if not value or context.resilient_parsing:
         return
 
     unit_list = koozie.koozie.get_unit_list()
@@ -29,11 +29,11 @@ def list_callback(ctx: click.Context, _: click.Parameter, value):
                     click.echo(f"  - {unit}")
             click.echo("\n")
 
-    ctx.exit()
+    context.exit()
 
 
 @click.command(
-    context_settings=dict(help_option_names=["-h", "--help"], ignore_unknown_options=True)
+    context_settings={"help_option_names": ["-h", "--help"], "ignore_unknown_options": True}
 )
 @click.version_option(None, "-v", "--version")
 @click.option(
@@ -48,7 +48,12 @@ def list_callback(ctx: click.Context, _: click.Parameter, value):
 @click.argument("value", type=click.FLOAT)
 @click.argument("from_units", type=click.STRING)
 @click.argument("to_units", type=click.STRING, required=False)
-def koozie_cli(value, from_units, to_units, list): # pylint: disable=unused-argument,redefined-builtin
+def koozie_cli(
+    value: float,
+    from_units: str,
+    to_units: str,
+    list: str,  # pylint: disable=unused-argument,redefined-builtin
+) -> None:
     """koozie: Convert VALUE from FROM_UNITS to TO_UNITS.
 
     If TO_UNITS is not specified, VALUE will be converted from FROM_UNITS into base SI units.
@@ -59,4 +64,4 @@ def koozie_cli(value, from_units, to_units, list): # pylint: disable=unused-argu
         else:
             click.echo(f"{koozie.koozie.convert_q(value,from_units,to_units)}")
     except (koozie.koozie.pint.UndefinedUnitError, koozie.koozie.pint.DimensionalityError) as e:
-        sys.exit(e)
+        sys.exit(str(e))
