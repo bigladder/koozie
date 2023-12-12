@@ -2,7 +2,7 @@
 import importlib.resources as pkg_resources
 from collections import OrderedDict
 from collections.abc import Iterable
-from typing import List
+from typing import List, Union  # Needed for python < 3.10
 
 import pint
 
@@ -69,21 +69,23 @@ def convert_q(value: float, from_units: str, to_units: str) -> pint.Quantity:
 
 
 # Public functions
-def fr_u(value: float | Iterable, from_units: str) -> float | List[float]:
+def fr_u(value: Union[float, Iterable], from_units: str) -> Union[float, List[float]]:
     """Convert a value from given units to base SI units"""
     if isinstance(value, float):
         return fr_q(value, from_units).magnitude
     return [fr_q(v, from_units).magnitude for v in value]
 
 
-def to_u(value: float, to_units: str) -> float:
+def to_u(value: Union[float, Iterable], to_units: str) -> Union[float, List[float]]:
     """Convert a value from base SI units to any other units"""
     if isinstance(value, float):
         return to_q(value, to_units).magnitude
     return [to_q(v, to_units).magnitude for v in value]
 
 
-def convert(value: float, from_units: str, to_units: str) -> float:
+def convert(
+    value: Union[float, Iterable], from_units: str, to_units: str
+) -> Union[float, List[float]]:
     """Convert a value from any units to another units of the same dimension"""
     if isinstance(value, float):
         return convert_q(value, from_units, to_units).magnitude
