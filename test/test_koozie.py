@@ -16,6 +16,20 @@ def test_units():
     assert fr_u(3.41241633, "Btu/h") == approx(1.0, 0.0001)
 
 
+def test_dimensionality():
+    """Test dimensionality"""
+    assert get_dimensionality("°F") == get_dimensionality("°C")
+    assert get_dimensionality("kW") == get_dimensionality("(lb_m*inch*meter)/(minute^2*day)")
+    assert get_dimensionality("F") != get_dimensionality("C")
+
+
+def test_iterable():
+    """Test converting iterable"""
+    temperatures = fr_u([5, 17, 35, 47, 82, 95], "°F")
+    assert isinstance(temperatures, list)
+    assert len(temperatures) == 6
+
+
 runner = CliRunner()
 
 
