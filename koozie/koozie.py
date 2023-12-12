@@ -34,6 +34,8 @@ unit_registry.default_format = "~P"  # short pretty
 # Add new aliases
 unit_registry.define("@alias inch_H2O_39F = in_H2O")
 unit_registry.define("@alias ton_of_refrigeration = ton_ref")
+unit_registry.define("@alias pound = lb_m")
+unit_registry.define("@alias force_pound = lb_f")
 
 # Add new derived dimensions
 unit_registry.define("[thermal_resistance] = [area] * [temperature] / [power]")
@@ -50,18 +52,18 @@ unit_registry.define("thermal_conductance_IP = Btu/(ft**2*degR*h) = U_factor_IP 
 
 
 # Private functions (used in CLI)
-def fr_q(value: float, from_units: str):
+def fr_q(value: float, from_units: str) -> pint.Quantity:
     """Convert a value from given units to a quantity in base SI units"""
     return unit_registry.Quantity(value, from_units).to_base_units()
 
 
-def to_q(value: float, to_units: str):
+def to_q(value: float, to_units: str) -> pint.Quantity:
     """Convert a value from base SI units to a quantity in any other units"""
     base_units = unit_registry.Quantity(value, to_units).to_base_units().units
     return unit_registry.Quantity(value, base_units).to(to_units)
 
 
-def convert_q(value: float, from_units: str, to_units: str):
+def convert_q(value: float, from_units: str, to_units: str) -> pint.Quantity:
     """Convert a value from any units to a quantity in another units of the same dimension"""
     return unit_registry.Quantity(value, from_units).to(to_units)
 
@@ -72,7 +74,7 @@ def fr_u(value: float, from_units: str):
     return fr_q(value, from_units).magnitude
 
 
-def to_u(value: float, to_units: str):
+def to_u(value: float, to_units: str) -> float:
     """Convert a value from base SI units to any other units"""
     return to_q(value, to_units).magnitude
 
@@ -81,9 +83,15 @@ def convert(value: float, from_units: str, to_units: str):
     """Convert a value from any units to another units of the same dimension"""
     return convert_q(value, from_units, to_units).magnitude
 
-def get_unit_list():
+
+def get_dimensionality(units: str) -> pint.util.UnitsContainer:
+    """Get the dimensionality dictionary for a specific unit."""
+    return unit_registry.Unit(units).dimensionality
+
+
+def get_unit_list() -> OrderedDict:
     """Get list of valid units."""
-    unit_list = {}
+    unit_list: dict = {}
     for u in unit_registry:
         if u in unit_registry:  # Certain symbols do not show up
             if unit_registry[u].dimensionless:

@@ -1,7 +1,7 @@
 """koozie unit tests"""
 from pytest import approx
 from click.testing import CliRunner
-from koozie import fr_u, to_u, convert
+from koozie import fr_u, to_u, convert, get_dimensionality
 from koozie.cli import koozie_cli
 
 
