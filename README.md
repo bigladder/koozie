@@ -9,11 +9,12 @@ koozie
 
 *koozie* also defines a few convenient aliases for different units. See the [source code](https://github.com/bigladder/koozie/blob/master/koozie/koozie.py) for details. A list of other available units is defined in [pint's default units definition file](https://github.com/hgrecco/pint/blob/master/pint/default_en.txt).
 
-There are three public functions in *koozie*:
+There are four public functions in *koozie*:
 
-- `fr_u(value, from_units)`: Convert a value from given units to base SI units
-- `to_u(value, to_units)`: Convert a value from base SI units to given units
-- `convert(value, from_units, to_units)`: Convert from any units to another units of the same dimension
+- `fr_u(value, from_units)`: Convert a value (or an iterable container of values) from given units to base SI units
+- `to_u(value, to_units)`: Convert a value (or an iterable container of values) from base SI units to given units
+- `convert(value, from_units, to_units)`: Convert a value (or an iterable container of values) from any units to another units of the same dimensionality
+- `get_dimensionality(units)`: Get a dictionary-like representation of the dimensionality of units. This is useful for checking if two quantities can be converted to common units.
 
 Example usage can be found in the [test file](https://github.com/bigladder/koozie/blob/master/test/test_koozie.py).
 
