@@ -33,6 +33,7 @@ unit_registry.default_format = "~P"  # short pretty
 
 # Add new aliases
 unit_registry.define("@alias inch_H2O_39F = in_H2O")
+unit_registry.define("@alias inch_H2O_39F = inH2O")
 unit_registry.define("@alias ton_of_refrigeration = ton_ref")
 unit_registry.define("@alias pound = lb_m")
 unit_registry.define("@alias force_pound = lb_f")
