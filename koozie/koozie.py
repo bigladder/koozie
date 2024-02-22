@@ -1,7 +1,6 @@
 """koozie functions"""
 
 import importlib.resources as pkg_resources
-from numbers import Number
 from collections import OrderedDict
 from collections.abc import Iterable
 from typing import List, Union  # Needed for python < 3.10
@@ -54,42 +53,42 @@ unit_registry.define("thermal_conductance_IP = Btu/(ft**2*degR*h) = U_factor_IP 
 
 
 # Private functions (used in CLI)
-def fr_q(value: Number, from_units: str) -> pint.Quantity:
+def fr_q(value: float, from_units: str) -> pint.Quantity:
     """Convert a value from given units to a quantity in base SI units"""
     return unit_registry.Quantity(value, from_units).to_base_units()
 
 
-def to_q(value: Number, to_units: str) -> pint.Quantity:
+def to_q(value: float, to_units: str) -> pint.Quantity:
     """Convert a value from base SI units to a quantity in any other units"""
     base_units = unit_registry.Quantity(value, to_units).to_base_units().units
     return unit_registry.Quantity(value, base_units).to(to_units)
 
 
-def convert_q(value: Number, from_units: str, to_units: str) -> pint.Quantity:
+def convert_q(value: float, from_units: str, to_units: str) -> pint.Quantity:
     """Convert a value from any units to a quantity in another units of the same dimension"""
     return unit_registry.Quantity(value, from_units).to(to_units)
 
 
 # Public functions
-def fr_u(value: Union[Number, Iterable], from_units: str) -> Union[Number, List[Number]]:
+def fr_u(value: Union[float, Iterable], from_units: str) -> Union[float, List[float]]:
     """Convert a value from given units to base SI units"""
-    if isinstance(value, Number):
+    if isinstance(value, (float, int)):
         return fr_q(value, from_units).magnitude
     return [fr_q(v, from_units).magnitude for v in value]
 
 
-def to_u(value: Union[Number, Iterable], to_units: str) -> Union[Number, List[float]]:
+def to_u(value: Union[float, Iterable], to_units: str) -> Union[float, List[float]]:
     """Convert a value from base SI units to any other units"""
-    if isinstance(value, Number):
+    if isinstance(value, (float, int)):
         return to_q(value, to_units).magnitude
     return [to_q(v, to_units).magnitude for v in value]
 
 
 def convert(
-    value: Union[Number, Iterable], from_units: str, to_units: str
-) -> Union[Number, List[Number]]:
+    value: Union[float, Iterable], from_units: str, to_units: str
+) -> Union[float, List[float]]:
     """Convert a value from any units to another units of the same dimension"""
-    if isinstance(value, Number):
+    if isinstance(value, (float, int)):
         return convert_q(value, from_units, to_units).magnitude
     return [convert_q(v, from_units, to_units).magnitude for v in value]
 
