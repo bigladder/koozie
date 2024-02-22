@@ -37,10 +37,6 @@ jobs:
           poetry run mypy test/*.py
         continue-on-error: true
       - name: Test
-        run: |
-          source $VENV
-          poetry run pytest
+        run: poetry run pytest
       - name: List units
-        run: |
-          source $VENV
-          poetry run koozie -l
+        run: poetry run koozie -l
