@@ -1,6 +1,6 @@
 """koozie unit tests"""
 
-from numpy import float32
+# from numpy import float32 # Numpy is not compatible with all versions of python we want to support
 
 from pytest import approx
 from click.testing import CliRunner
@@ -16,7 +16,7 @@ def test_units():
     assert to_u(273.15, "°C") == approx(0.0)
     assert fr_u(1.0, "in") == approx(0.0254)
     assert fr_u(1, "in") == approx(0.0254)
-    assert fr_u(float32(1), "in") == approx(0.0254)
+    # assert fr_u(float32(1), "in") == approx(0.0254)
     assert to_u(0.0254, "in") == approx(1.0)
     assert fr_u(3.41241633, "Btu/h") == approx(1.0, 0.0001)
 
