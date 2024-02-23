@@ -71,14 +71,18 @@ def convert_q(value: SupportsFloat, from_units: str, to_units: str) -> pint.Quan
 
 
 # Public functions
-def fr_u(value: Union[SupportsFloat, Iterable], from_units: str) -> Union[float, List[float]]:
+def fr_u(
+    value: Union[SupportsFloat, Iterable[SupportsFloat]], from_units: str
+) -> Union[float, List[float]]:
     """Convert a value from given units to base SI units"""
     if isinstance(value, SupportsFloat):
         return fr_q(value, from_units).magnitude
     return [fr_q(v, from_units).magnitude for v in value]
 
 
-def to_u(value: Union[SupportsFloat, Iterable], to_units: str) -> Union[float, List[float]]:
+def to_u(
+    value: Union[SupportsFloat, Iterable[SupportsFloat]], to_units: str
+) -> Union[float, List[float]]:
     """Convert a value from base SI units to any other units"""
     if isinstance(value, SupportsFloat):
         return to_q(value, to_units).magnitude
@@ -86,7 +90,7 @@ def to_u(value: Union[SupportsFloat, Iterable], to_units: str) -> Union[float, L
 
 
 def convert(
-    value: Union[SupportsFloat, Iterable], from_units: str, to_units: str
+    value: Union[SupportsFloat, Iterable[SupportsFloat]], from_units: str, to_units: str
 ) -> Union[float, List[float]]:
     """Convert a value from any units to another units of the same dimension"""
     if isinstance(value, SupportsFloat):
