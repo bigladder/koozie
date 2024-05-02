@@ -8,30 +8,9 @@ from typing import List, Union  # Needed for python < 3.10
 
 import pint
 
-# Edit constants template to stop using h to represent planck_constant
-# See https://github.com/hgrecco/pint/issues/719#issuecomment-998872301
-# ---------------------------------------------------------------------
-constants_template = (
-    pkg_resources.read_text(pint, "constants_en.txt")
-    .replace("= h  ", "     ")
-    .replace(" h ", " planck_constant ")
-)
-
-# Edit units template to use h to represent hour instead of planck_constant
-units_template = (
-    pkg_resources.read_text(pint, "default_en.txt")
-    .replace("@import constants_en.txt", "")
-    .replace(" h ", " planck_constant ")
-    .replace("hour = 60 * minute = hr", "hour = 60 * minute = h = hr")
-)
-
-# Join templates as iterable object
-full_template = constants_template.split("\n") + units_template.split("\n")
-
 # Set up UnitRegistry with abbreviated scientific format
-unit_registry = pint.UnitRegistry(full_template)
+unit_registry = pint.UnitRegistry()
 unit_registry.default_format = "~P"  # short pretty
-# ---------------------------------------------------------------------
 
 # Add new aliases
 unit_registry.define("@alias inch_H2O_39F = in_H2O")
@@ -100,10 +79,7 @@ def convert(
 
 def get_dimensionality(units: str) -> pint.util.UnitsContainer:
     """Get the dimensionality dictionary for a specific unit."""
-    if units in [unit for unit in unit_registry]:
-        return unit_registry.Unit(units).dimensionality
-    else:
-        return unit_registry.Unit("").dimensionality
+    return unit_registry.Unit(units).dimensionality
 
 
 def get_unit_list() -> OrderedDict:
