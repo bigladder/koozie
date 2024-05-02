@@ -26,6 +26,7 @@ def test_dimensionality():
     assert get_dimensionality("°F") == get_dimensionality("°C")
     assert get_dimensionality("kW") == get_dimensionality("(lb_m*inch*meter)/(minute^2*day)")
     assert get_dimensionality("F") != get_dimensionality("C")
+    assert get_dimensionality("%") == get_dimensionality("")
 
 
 def test_iterable():

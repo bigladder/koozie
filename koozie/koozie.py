@@ -100,7 +100,10 @@ def convert(
 
 def get_dimensionality(units: str) -> pint.util.UnitsContainer:
     """Get the dimensionality dictionary for a specific unit."""
-    return unit_registry.Unit(units).dimensionality
+    if units in [unit for unit in unit_registry]:
+        return unit_registry.Unit(units).dimensionality
+    else:
+        return unit_registry.Unit("").dimensionality
 
 
 def get_unit_list() -> OrderedDict:
