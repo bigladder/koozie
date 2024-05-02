@@ -1,6 +1,5 @@
 """koozie functions"""
 
-import importlib.resources as pkg_resources
 from collections import OrderedDict
 from collections.abc import Iterable
 from typing import SupportsFloat
