@@ -6,10 +6,12 @@ from typing import SupportsFloat
 from typing import List, Union  # Needed for python < 3.10
 
 import pint
+import pint.definitions
+import pint.facets
 
 # Set up UnitRegistry with abbreviated scientific format
 unit_registry = pint.UnitRegistry()
-unit_registry.default_format = "~P"  # short pretty
+unit_registry.formatter.default_format = "~P"  # short pretty
 
 # Add new aliases
 unit_registry.define("@alias inch_H2O_39F = in_H2O")
@@ -32,35 +34,31 @@ unit_registry.define("thermal_conductance_IP = Btu/(ft**2*degR*h) = U_factor_IP 
 
 
 # Private functions (used in CLI)
-def fr_q(value: SupportsFloat, from_units: str) -> pint.Quantity:
+def fr_q(value: SupportsFloat, from_units: str) -> pint.facets.plain.PlainQuantity:
     """Convert a value from given units to a quantity in base SI units"""
     return unit_registry.Quantity(value, from_units).to_base_units()
 
 
-def to_q(value: SupportsFloat, to_units: str) -> pint.Quantity:
+def to_q(value: SupportsFloat, to_units: str) -> pint.facets.plain.PlainQuantity:
     """Convert a value from base SI units to a quantity in any other units"""
     base_units = unit_registry.Quantity(value, to_units).to_base_units().units
     return unit_registry.Quantity(value, base_units).to(to_units)
 
 
-def convert_q(value: SupportsFloat, from_units: str, to_units: str) -> pint.Quantity:
+def convert_q(value: SupportsFloat, from_units: str, to_units: str) -> pint.facets.plain.PlainQuantity:
     """Convert a value from any units to a quantity in another units of the same dimension"""
     return unit_registry.Quantity(value, from_units).to(to_units)
 
 
 # Public functions
-def fr_u(
-    value: Union[SupportsFloat, Iterable[SupportsFloat]], from_units: str
-) -> Union[float, List[float]]:
+def fr_u(value: Union[SupportsFloat, Iterable[SupportsFloat]], from_units: str) -> Union[float, List[float]]:
     """Convert a value from given units to base SI units"""
     if isinstance(value, SupportsFloat):
         return fr_q(value, from_units).magnitude
     return [fr_q(v, from_units).magnitude for v in value]
 
 
-def to_u(
-    value: Union[SupportsFloat, Iterable[SupportsFloat]], to_units: str
-) -> Union[float, List[float]]:
+def to_u(value: Union[SupportsFloat, Iterable[SupportsFloat]], to_units: str) -> Union[float, List[float]]:
     """Convert a value from base SI units to any other units"""
     if isinstance(value, SupportsFloat):
         return to_q(value, to_units).magnitude
@@ -99,11 +97,12 @@ def get_unit_list() -> OrderedDict:
                 unit_list[dimensionality]["units"][unit].append(u)
 
     # Get dimension aliases
-    for dim in unit_registry._dimensions:  # pylint: disable=protected-access
+    for dim, definition in unit_registry._dimensions.items():  # pylint: disable=protected-access
         if dim in unit_list:
             continue
 
-        reference = unit_registry._dimensions[dim].reference  # pylint: disable=protected-access
+        assert isinstance(definition, pint.facets.plain.definitions.DerivedDimensionDefinition)
+        reference = definition.reference
         dimensionality = f"{unit_registry.get_dimensionality(reference)}"
         if dimensionality not in unit_list:
             unit_list[dimensionality] = {"aliases": [], "units": {}}
