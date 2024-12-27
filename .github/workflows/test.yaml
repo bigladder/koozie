@@ -26,17 +26,6 @@ jobs:
         uses: bigladder/github-actions/setup-python-poetry@main
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Lint with Pylint
+      - name: Run tasks
         run: |
-          poetry run pylint ${{env.REPOSITORY_NAME}}
-          poetry run pylint test/*.py
-        continue-on-error: true
-      - name: Static type checking
-        run: |
-          poetry run mypy ${{env.REPOSITORY_NAME}}
-          poetry run mypy test/*.py
-        continue-on-error: true
-      - name: Test
-        run: poetry run pytest
-      - name: List units
-        run: poetry run koozie -l
+          poetry run doit -v 2
