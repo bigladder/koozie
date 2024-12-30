@@ -79,6 +79,11 @@ def get_dimensionality(units: str) -> pint.util.UnitsContainer:
     return unit_registry.Unit(units).dimensionality
 
 
+def format_units(units: str) -> str:
+    """Format units for display."""
+    return f"{unit_registry.Unit(units):~P}"
+
+
 def get_unit_list() -> OrderedDict:
     """Get list of valid units."""
     unit_list: dict = {}

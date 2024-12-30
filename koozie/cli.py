@@ -1,4 +1,5 @@
 """koozie command line interface"""
+
 import sys
 import click
 import koozie
@@ -32,9 +33,7 @@ def list_callback(context: click.Context, _: click.Parameter, value: str) -> Non
     context.exit()
 
 
-@click.command(
-    context_settings={"help_option_names": ["-h", "--help"], "ignore_unknown_options": True}
-)
+@click.command(context_settings={"help_option_names": ["-h", "--help"], "ignore_unknown_options": True})
 @click.version_option(None, "-v", "--version")
 @click.option(
     "-l",

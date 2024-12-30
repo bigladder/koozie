@@ -4,7 +4,7 @@
 
 from pytest import approx
 from click.testing import CliRunner
-from koozie import fr_u, to_u, convert, get_dimensionality
+from koozie import fr_u, to_u, convert, get_dimensionality, format_units
 from koozie.cli import koozie_cli
 
 
@@ -28,6 +28,21 @@ def test_dimensionality():
     assert get_dimensionality("F") != get_dimensionality("C")
     assert get_dimensionality("%") == get_dimensionality("")
     assert get_dimensionality("h") == get_dimensionality("s")
+    assert get_dimensionality("ton_ref") == get_dimensionality("W")
+
+
+def test_unit_formatting():
+    """Test unit formatting"""
+    assert format_units("degF") == "°F"
+    assert format_units("m**3/s") == "m³/s"
+    assert format_units("m**1.5/s") == "m¹⋅⁵/s"
+    assert format_units("m**2*K/W") == "K·m²/W"
+    assert format_units("degree") == "deg"
+    assert format_units("cm**3") == "cm³"
+    assert format_units("inch_H2O_39F") == "inch_H2O_39F"
+    assert format_units("cfm") == "cfm"
+    # assert format_units("thermal_resistance_SI") == "m²·K/W"
+    # assert format_units("ton_ref") == "ton_ref"
 
 
 def test_iterable():
